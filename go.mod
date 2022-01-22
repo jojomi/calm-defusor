@@ -3,13 +3,13 @@ module github.com/jojomi/calm-defusor
 go 1.17
 
 require (
+	github.com/AlecAivazis/survey/v2 v2.2.12
 	github.com/jojomi/go-script v2.1.0+incompatible
 	github.com/jojomi/go-script/v2 v2.3.1
 	github.com/rs/zerolog v1.26.1
 )
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.2.12 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect

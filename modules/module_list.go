@@ -10,6 +10,7 @@ func NewModuleList() *ModuleList {
 
 func (m *ModuleList) AddAllAvailable() *ModuleList {
 	m.AddModule(NewSimpleWiresModule())
+	m.AddModule(NewBigButtonModule())
 	m.AddModule(NewPasswordModule())
 
 	return m

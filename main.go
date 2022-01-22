@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/jojomi/calm-defusor/modules"
 	"github.com/jojomi/go-script/v2/interview"
@@ -39,5 +40,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+		fmt.Println()
+		fmt.Println()
 	}
 }
