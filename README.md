@@ -7,11 +7,11 @@ https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/
 Can solve
 * simple wires
 * password
+* big button
+* Memory
 
 Next modules
-* big button
 * Simon says
-* Memory
 * wire screens
 * Morse
 * complex wires
