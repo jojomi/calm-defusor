@@ -11,6 +11,10 @@ type SimpleWiresModule struct {
 	colors    []string
 }
 
+func (s *SimpleWiresModule) Name() string {
+	return "Einfache Drähte"
+}
+
 func NewSimpleWiresModule() *SimpleWiresModule {
 	return &SimpleWiresModule{
 		allColors: []string{"red", "blue", "white", "yellow", "black"},

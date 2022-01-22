@@ -15,6 +15,10 @@ type PasswordModule struct {
 	letters []*LetterState
 }
 
+func (p *PasswordModule) Name() string {
+	return "Passwort"
+}
+
 func NewPasswordModule() *PasswordModule {
 	words := []string{
 		"angst",
