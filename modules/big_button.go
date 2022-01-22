@@ -11,6 +11,8 @@ type BigButtonModule struct {
 	allColors      []string
 	allStripColors []string
 	allTexts       []string
+
+	textCache string
 }
 
 func (b *BigButtonModule) Name() string {
@@ -114,6 +116,7 @@ func (b *BigButtonModule) tap() {
 }
 
 func (b *BigButtonModule) timedRelease() error {
+	communication.Tell("Knopf drücken und gedrückt halten.")
 	color, err := interview.ChooseOneString("Farbe Streifen?", b.allStripColors)
 	if err != nil {
 		return err
@@ -130,9 +133,14 @@ func (b *BigButtonModule) timedRelease() error {
 }
 
 func (b *BigButtonModule) releaseAt(value int) {
-	communication.Tell(fmt.Sprintf("Knopf drücken und gedrückt halten. Loslassen, wenn der Timer an einer beliebigen Stelle eine %d enthält.", value))
+	communication.Tell(fmt.Sprintf("Knopf loslassen, wenn der Timer an einer beliebigen Stelle eine %d enthält.", value))
 }
 
 func (b *BigButtonModule) getText() (string, error) {
-	return interview.ChooseOneString("Text auf dem Knopf?", b.allTexts)
+	if b.textCache != "" {
+		return b.textCache, nil
+	}
+	text, err := interview.ChooseOneString("Text auf dem Knopf?", b.allTexts)
+	b.textCache = text
+	return text, err
 }
