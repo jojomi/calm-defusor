@@ -1,6 +1,6 @@
 module github.com/jojomi/calm-defusor
 
-go 1.17
+go 1.18
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.2.12
@@ -10,6 +10,7 @@ require (
 )
 
 require (
+	github.com/Xuanwo/go-locale v1.1.0 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect

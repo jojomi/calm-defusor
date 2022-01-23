@@ -3,12 +3,13 @@ package modules
 import (
 	"fmt"
 	"github.com/jojomi/calm-defusor/communication"
+	"github.com/jojomi/calm-defusor/ktane_color"
 	"github.com/jojomi/go-script/v2/interview"
 	"github.com/rs/zerolog/log"
 )
 
 type BigButtonModule struct {
-	allColors      []string
+	allColors      []ktane_color.Color
 	allStripColors []string
 	allTexts       []string
 
@@ -21,20 +22,26 @@ func (b *BigButtonModule) Name() string {
 
 func NewBigButtonModule() *BigButtonModule {
 	return &BigButtonModule{
-		allColors:      []string{"red", "blue", "white", "yellow", "black"},
+		allColors: []ktane_color.Color{
+			ktane_color.ColorRed,
+			ktane_color.ColorBlue,
+			ktane_color.ColorWhite,
+			ktane_color.ColorYellow,
+			ktane_color.ColorBlack,
+		},
 		allStripColors: []string{"blue", "white", "yellow", "OTHER"},
 		allTexts:       []string{"Abbrechen", "Gedrückt halten", "Sprengen", "ANDERE"},
 	}
 }
 
 func (b *BigButtonModule) Solve() error {
-	color, err := interview.ChooseOneString("Farbe Knopf?", b.allColors)
+	color, err := communication.ChooseOneStringable("Farbe Knopf?", b.allColors)
 	if err != nil {
 		return err
 	}
 
 	// 1.
-	if color == "blue" {
+	if color == ktane_color.ColorBlue {
 		text, err := b.getText()
 		if err != nil {
 			return err
@@ -63,7 +70,7 @@ func (b *BigButtonModule) Solve() error {
 	}
 
 	// 3.
-	if color == "white" {
+	if color == ktane_color.ColorWhite {
 		carIndicator, err := interview.ConfirmNoDefault("Hat die Bombe einen CAR Indikator?")
 		if err != nil {
 			return err
@@ -88,13 +95,13 @@ func (b *BigButtonModule) Solve() error {
 	}
 
 	// 5.
-	if color == "yellow" {
+	if color == ktane_color.ColorYellow {
 		log.Info().Msg("Regel 5 triggered")
 		return b.timedRelease()
 	}
 
 	// 6.
-	if color == "red" {
+	if color == ktane_color.ColorRed {
 		text, err := b.getText()
 		if err != nil {
 			return err

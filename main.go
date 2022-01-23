@@ -6,18 +6,21 @@ import (
 	"github.com/jojomi/calm-defusor/modules"
 	"github.com/jojomi/go-script/v2/interview"
 	"github.com/rs/zerolog/log"
+	"golang.org/x/text/language"
 	"os"
 )
 
-func main() {
-	mods := modules.NewModuleList().AddAllAvailable()
-	moduleNames := mods.GetNames()
+var languageTag language.Tag
 
+func main() {
 	var (
 		nextModuleName string
 		mod            modules.Module
 		err            error
 	)
+
+	mods := modules.NewModuleList().AddAllAvailable()
+	moduleNames := mods.GetNames()
 
 	for {
 		// select
