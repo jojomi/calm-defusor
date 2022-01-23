@@ -13,6 +13,7 @@ func (m *ModuleList) AddAllAvailable() *ModuleList {
 	m.AddModule(NewBigButtonModule())
 	m.AddModule(NewSimonSaysModule())
 	m.AddModule(NewMemoryModule())
+	m.AddModule(NewComplexWiresModule())
 	m.AddModule(NewPasswordModule())
 
 	return m

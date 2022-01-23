@@ -9,12 +9,12 @@ Can solve
 * password
 * big button
 * Memory
+* Simon says
+* complex wires
 
 Next modules
-* Simon says
 * wire screens
 * Morse
-* complex wires
 * 6 words
 * symbols
 * maze
