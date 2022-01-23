@@ -6,6 +6,8 @@ import (
 	"github.com/jojomi/go-script/v2/interview"
 )
 
+// Optimization: Ask for number of wires upfront and tell to cut last before talking about it if not yet solved
+
 const (
 	complexWiresHasRed = 1 << iota
 	complexWiresHasBlue
@@ -138,11 +140,11 @@ func (c *ComplexWiresModule) handleWire(val int) error {
 }
 
 func (c *ComplexWiresModule) handleD() {
-	communication.Tell("Draht durchtrennen!")
+	communication.Tell("Draht durchtrennen! Alle exakt gleichen Drähte, egal wo, auch durchtrennen.")
 }
 
 func (c *ComplexWiresModule) handleN() {
-	communication.Tell("Draht NICHT durchtrennen!")
+	communication.Tell("Draht NICHT durchtrennen! Alle exakt gleichen Drähte, egal wo, nicht mehr mitteilen.")
 }
 
 func (c *ComplexWiresModule) handleS() error {

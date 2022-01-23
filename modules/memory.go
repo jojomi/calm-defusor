@@ -11,7 +11,8 @@ type MemoryStep struct {
 }
 
 type MemoryModule struct {
-	steps []MemoryStep
+	steps    []MemoryStep
+	tellOnly bool
 }
 
 func (m *MemoryModule) Name() string {
@@ -35,6 +36,11 @@ func (m *MemoryModule) Solve() error {
 			// retry
 			i--
 			continue
+		}
+
+		// last round?
+		if i == rounds-1 {
+			m.tellOnly = true
 		}
 
 		switch i {
@@ -126,10 +132,22 @@ func (m *MemoryModule) pushValue(value int) {
 
 func (m *MemoryModule) pushPosLike(step int) {
 	pos := m.steps[step-1].Position
+
+	if m.tellOnly {
+		communication.Tell(fmt.Sprintf("%d. Zahl von links drücken.", pos))
+		return
+	}
+
 	m.pushPos(pos)
 }
 
 func (m *MemoryModule) pushValueLike(step int) {
 	value := m.steps[step-1].Value
+
+	if m.tellOnly {
+		communication.Tell(fmt.Sprintf("Kleine %d drücken.", value))
+		return
+	}
+
 	m.pushValue(value)
 }
