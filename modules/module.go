@@ -3,6 +3,7 @@ package modules
 type Module interface {
 	Name() string
 	Solve() error
+	Reset() error
 }
 
 func mapList[T, U any](in []T, mapperFunc func(t T) U) []U {

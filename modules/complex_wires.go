@@ -29,6 +29,13 @@ func NewComplexWiresModule() *ComplexWiresModule {
 	return &ComplexWiresModule{}
 }
 
+func (c *ComplexWiresModule) Reset() error {
+	c.serialCache = nil
+	c.hasParallelPortCache = nil
+	c.hasMoreThanOneBatteryCache = nil
+	return nil
+}
+
 func (c *ComplexWiresModule) Solve() error {
 	index := 1
 

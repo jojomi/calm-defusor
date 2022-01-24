@@ -23,6 +23,12 @@ func NewMemoryModule() *MemoryModule {
 	return &MemoryModule{}
 }
 
+func (m *MemoryModule) Reset() error {
+	m.steps = []MemoryStep{}
+	m.tellOnly = false
+	return nil
+}
+
 func (m *MemoryModule) Solve() error {
 	rounds := 5
 

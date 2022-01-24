@@ -70,6 +70,12 @@ func NewPasswordModule() *PasswordModule {
 	}
 
 }
+
+func (p *PasswordModule) Reset() error {
+	p.letters = make([]*LetterState, 0)
+	return nil
+}
+
 func (p *PasswordModule) Solve() error {
 	wordLength := p.getWordLength()
 	for letterIndex := 0; letterIndex < wordLength; letterIndex++ {

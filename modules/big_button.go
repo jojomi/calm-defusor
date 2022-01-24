@@ -13,7 +13,7 @@ type BigButtonModule struct {
 	allStripColors []string
 	allTexts       []string
 
-	textCache string
+	textCache *string
 }
 
 func (b *BigButtonModule) Name() string {
@@ -32,6 +32,11 @@ func NewBigButtonModule() *BigButtonModule {
 		allStripColors: []string{"blue", "white", "yellow", "OTHER"},
 		allTexts:       []string{"Abbrechen", "Gedrückt halten", "Sprengen", "ANDERE"},
 	}
+}
+
+func (b *BigButtonModule) Reset() error {
+	b.textCache = nil
+	return nil
 }
 
 func (b *BigButtonModule) Solve() error {
@@ -144,10 +149,10 @@ func (b *BigButtonModule) releaseAt(value int) {
 }
 
 func (b *BigButtonModule) getText() (string, error) {
-	if b.textCache != "" {
-		return b.textCache, nil
+	if b.textCache != nil {
+		return *b.textCache, nil
 	}
 	text, err := interview.ChooseOneString("Text auf dem Knopf?", b.allTexts)
-	b.textCache = text
+	b.textCache = &text
 	return text, err
 }

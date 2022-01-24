@@ -28,6 +28,10 @@ func NewSimonSaysModule() *SimonSaysModule {
 	}
 }
 
+func (s *SimonSaysModule) Reset() error {
+	return nil
+}
+
 func (s *SimonSaysModule) Solve() error {
 	strikeCount, err := communication.ChooseOneWithMapper[int]("Bisherige Fehler (Strikes)?", []int{0, 1, 2}, func(t int) string {
 		if t == 0 {

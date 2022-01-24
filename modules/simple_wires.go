@@ -27,6 +27,11 @@ func NewSimpleWiresModule() *SimpleWiresModule {
 	}
 }
 
+func (s *SimpleWiresModule) Reset() error {
+	s.colors = []ktane.Color{}
+	return nil
+}
+
 func (s *SimpleWiresModule) Solve() error {
 	// ask for colors
 	index := 0

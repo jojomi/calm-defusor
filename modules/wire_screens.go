@@ -25,6 +25,10 @@ func NewWireScreensModule() *WireScreensModule {
 	}
 }
 
+func (x *WireScreensModule) Reset() error {
+	return nil
+}
+
 func (x *WireScreensModule) Solve() error {
 	connectionMap := map[ktane.Color][][]string{
 		ktane.ColorRed: {
