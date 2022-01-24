@@ -40,7 +40,7 @@ func (b *BigButtonModule) Reset() error {
 }
 
 func (b *BigButtonModule) Solve() error {
-	color, err := communication.ChooseOneStringable("Farbe Knopf?", b.allColors)
+	color, err := communication.ChooseOneColor("Farbe Knopf?", b.allColors)
 	if err != nil {
 		return err
 	}
