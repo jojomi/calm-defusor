@@ -68,7 +68,7 @@ func (s *SimonSaysModule) Solve() error {
 			mapList[ktane.Color, string](
 				mappedColors,
 				func(c ktane.Color) string {
-					return c.BySysLocale()
+					return c.BySysLocaleForTerminal()
 				},
 			), ", "))
 	}

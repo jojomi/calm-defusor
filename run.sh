@@ -1,7 +1,8 @@
 #!/bin/sh
 set -ex
 
-GOBIN=gotip
+GO=gotip
 
-"${GOBIN}" generate ./...
-"${GOBIN}" run main.go
+"${GO}" generate ./...
+"${GO}" install
+calm-defusor

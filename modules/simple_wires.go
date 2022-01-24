@@ -166,7 +166,7 @@ func (s SimpleWiresModule) handleSix() {
 
 // one-based!
 func (s SimpleWiresModule) cut(index int) {
-	communication.Tellf("%d. Draht trennen (dieser hat die Farbe %s)", index, s.colors[index-1].BySysLocale())
+	communication.Tellf("%d. Draht trennen (dieser hat die Farbe %s)", index, s.colors[index-1].BySysLocaleForTerminal())
 }
 
 func (s SimpleWiresModule) countColor(searchColor ktane.Color) int {

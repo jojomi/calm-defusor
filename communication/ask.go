@@ -25,7 +25,7 @@ func AskInt(question string) (int, error) {
 
 func ChooseOneColor(question string, options []ktane.Color) (ktane.Color, error) {
 	return ChooseOneWithMapper[ktane.Color](question, options, func(color ktane.Color) string {
-		return color.BySysLocale()
+		return color.BySysLocaleForTerminal()
 	})
 }
 
