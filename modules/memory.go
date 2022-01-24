@@ -15,8 +15,12 @@ type MemoryModule struct {
 	tellOnly bool
 }
 
-func (m *MemoryModule) Name() string {
+func (m MemoryModule) Name() string {
 	return "Memory"
+}
+
+func (m MemoryModule) String() string {
+	return m.Name()
 }
 
 func NewMemoryModule() *MemoryModule {
@@ -34,12 +38,11 @@ func (m *MemoryModule) Solve() error {
 
 	var (
 		numberShown int
-		err         error
 	)
 	for i := 0; i < rounds; i++ {
-		numberShown, err = communication.AskInt("Große Zahl?")
-		if err != nil {
-			// retry
+		numberShown = communication.AskInt("Große Zahl?")
+		if numberShown < 0 || numberShown > 4 {
+			communication.Tellf("Die Zahl %d gibt es nicht. Nochmal!", numberShown)
 			i--
 			continue
 		}
@@ -117,7 +120,7 @@ func (m *MemoryModule) Solve() error {
 }
 
 func (m *MemoryModule) pushPos(pos int) {
-	value, _ := communication.AskInt(fmt.Sprintf("Wie lautet die %d. kleine Zahl?", pos))
+	value := communication.AskInt(fmt.Sprintf("Wie lautet die %d. kleine Zahl?", pos))
 	m.steps = append(m.steps, MemoryStep{
 		Position: pos,
 		Value:    value,
@@ -127,7 +130,7 @@ func (m *MemoryModule) pushPos(pos int) {
 }
 
 func (m *MemoryModule) pushValue(value int) {
-	pos, _ := communication.AskInt(fmt.Sprintf("An welcher Position steht die kleine %d?", value))
+	pos := communication.AskInt(fmt.Sprintf("An welcher Position steht die kleine %d?", value))
 	m.steps = append(m.steps, MemoryStep{
 		Position: pos,
 		Value:    value,

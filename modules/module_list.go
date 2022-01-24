@@ -8,6 +8,10 @@ func NewModuleList() *ModuleList {
 	return &ModuleList{}
 }
 
+func (m ModuleList) All() []Module {
+	return m.modules
+}
+
 func (m *ModuleList) AddAllAvailable() *ModuleList {
 	m.AddModule(NewSimpleWiresModule())
 	m.AddModule(NewBigButtonModule())

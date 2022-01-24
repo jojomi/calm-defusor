@@ -15,6 +15,10 @@ func (s *SimpleWiresModule) Name() string {
 	return "Einfache Drähte"
 }
 
+func (s *SimpleWiresModule) String() string {
+	return s.Name()
+}
+
 func NewSimpleWiresModule() *SimpleWiresModule {
 	return &SimpleWiresModule{
 		allColors: []ktane.Color{
@@ -88,10 +92,7 @@ func (s SimpleWiresModule) handleThree() {
 
 func (s SimpleWiresModule) handleFour() {
 	if s.countColor(ktane.ColorRed) > 1 {
-		serial, err := communication.AskInt("Letzte Ziffer der Seriennummer?")
-		if err != nil {
-			panic(err)
-		}
+		serial := communication.AskInt("Letzte Ziffer der Seriennummer?")
 		if serial%2 == 1 {
 			s.cut(s.getLastIndex(ktane.ColorRed) + 1)
 			return
@@ -119,10 +120,7 @@ func (s SimpleWiresModule) handleFour() {
 
 func (s SimpleWiresModule) handleFive() {
 	if s.colors[4] == ktane.ColorBlack {
-		serial, err := communication.AskInt("Letzte Ziffer der Seriennummer?")
-		if err != nil {
-			panic(err)
-		}
+		serial := communication.AskInt("Letzte Ziffer der Seriennummer?")
 		if serial%2 == 1 {
 			s.cut(4)
 			return
@@ -145,10 +143,7 @@ func (s SimpleWiresModule) handleFive() {
 
 func (s SimpleWiresModule) handleSix() {
 	if s.countColor(ktane.ColorYellow) == 0 {
-		serial, err := communication.AskInt("Letzte Ziffer der Seriennummer?")
-		if err != nil {
-			panic(err)
-		}
+		serial := communication.AskInt("Letzte Ziffer der Seriennummer?")
 		if serial%2 == 1 {
 			s.cut(3)
 			return

@@ -16,6 +16,10 @@ func (s *SimonSaysModule) Name() string {
 	return "Simon sagt"
 }
 
+func (s *SimonSaysModule) String() string {
+	return s.Name()
+}
+
 func NewSimonSaysModule() *SimonSaysModule {
 	allColors := []ktane.Color{
 		ktane.ColorBlue,

@@ -1,11 +1,15 @@
 package communication
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/gookit/color"
+)
 
 func Tell(text string) {
-	fmt.Println("->", text)
+	colorPrinter := color.New(color.FgYellow, color.BgBlack, color.Bold)
+	colorPrinter.Println(text)
 }
 
 func Tellf(text string, values ...interface{}) {
-	fmt.Printf("-> "+text+"\n", values...)
+	Tell(fmt.Sprintf(text, values...))
 }

@@ -6,21 +6,16 @@ import (
 	"github.com/jojomi/calm-defusor/ktane"
 )
 
-func AskString(question string) (string, error) {
-	// TODO implement
-	return "", nil
-}
-
-func AskBool(question string) (bool, error) {
-	fmt.Println("(?)", question)
-	return true, nil
-}
-
-func AskInt(question string) (int, error) {
-	fmt.Println("(?)", question)
+func AskInt(question string) int {
 	var i int
-	_, err := fmt.Scanf("%d", &i)
-	return i, err
+	for {
+		fmt.Println("(?)", question)
+		_, err := fmt.Scanf("%d", &i)
+		if err == nil {
+			break
+		}
+	}
+	return i
 }
 
 func ChooseOneColor(question string, options []ktane.Color) (ktane.Color, error) {

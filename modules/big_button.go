@@ -16,8 +16,12 @@ type BigButtonModule struct {
 	textCache *string
 }
 
-func (b *BigButtonModule) Name() string {
+func (b BigButtonModule) Name() string {
 	return "Großer Knopf"
+}
+
+func (b BigButtonModule) String() string {
+	return b.Name()
 }
 
 func NewBigButtonModule() *BigButtonModule {
@@ -58,10 +62,7 @@ func (b *BigButtonModule) Solve() error {
 	}
 
 	// 2.
-	numBatteries, err := communication.AskInt("Anzahl Batterien an der Bombe?")
-	if err != nil {
-		return err
-	}
+	numBatteries := communication.AskInt("Anzahl Batterien an der Bombe?")
 	if numBatteries > 1 {
 		text, err := b.getText()
 		if err != nil {

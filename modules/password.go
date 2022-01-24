@@ -19,6 +19,10 @@ func (p *PasswordModule) Name() string {
 	return "Passwort"
 }
 
+func (p *PasswordModule) String() string {
+	return p.Name()
+}
+
 func NewPasswordModule() *PasswordModule {
 	words := []string{
 		"angst",

@@ -3,28 +3,33 @@ package main
 import (
 	"fmt"
 	"github.com/AlecAivazis/survey/v2/terminal"
+	"github.com/jojomi/calm-defusor/communication"
 	"github.com/jojomi/calm-defusor/modules"
-	"github.com/jojomi/go-script/v2/interview"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"golang.org/x/text/language"
 	"os"
+	"time"
 )
-
-var languageTag language.Tag
 
 func main() {
 	var (
-		nextModuleName string
-		mod            modules.Module
-		err            error
+		mod modules.Module
+		err error
 	)
 
-	mods := modules.NewModuleList().AddAllAvailable()
-	moduleNames := mods.GetNames()
+	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339})
 
+	mods := modules.NewModuleList().AddAllAvailable()
+
+	isFirstModule := true
 	for {
+		if !isFirstModule {
+			fmt.Println()
+			fmt.Println()
+		}
+
 		// select
-		nextModuleName, err = interview.ChooseOneString("Nächstes Modul?", moduleNames)
+		mod, err = communication.ChooseOneStringable[modules.Module]("Nächstes Modul?", mods.All())
 		if err != nil {
 			if err == terminal.InterruptErr {
 				os.Exit(0)
@@ -33,17 +38,14 @@ func main() {
 			continue
 		}
 
-		mod = mods.GetByName(nextModuleName)
-		if mod == nil {
-			log.Error().Err(err).Msgf("module not found: %s", nextModuleName)
-			continue
-		}
-
+		isFirstModule = false
 		err = mod.Solve()
 		if err != nil {
-			panic(err)
+			if err == terminal.InterruptErr {
+				log.Error().Err(err).Msgf(`Module "%s" aborted`, mod.Name())
+				continue
+			}
+			log.Error().Err(err).Msgf(`Module "%s"failed`, mod.Name())
 		}
-		fmt.Println()
-		fmt.Println()
 	}
 }

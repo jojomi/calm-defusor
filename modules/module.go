@@ -4,6 +4,7 @@ type Module interface {
 	Name() string
 	Solve() error
 	Reset() error
+	String() string
 }
 
 func mapList[T, U any](in []T, mapperFunc func(t T) U) []U {

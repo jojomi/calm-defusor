@@ -21,8 +21,12 @@ type ComplexWiresModule struct {
 	hasMoreThanOneBatteryCache *bool
 }
 
-func (c *ComplexWiresModule) Name() string {
+func (c ComplexWiresModule) Name() string {
 	return "Komplexe Drähte"
+}
+
+func (c ComplexWiresModule) String() string {
+	return c.Name()
 }
 
 func NewComplexWiresModule() *ComplexWiresModule {
@@ -98,8 +102,6 @@ func (c *ComplexWiresModule) getWireValue() (int, error) {
 		result = result | complexWiresHasStar
 	}
 
-	fmt.Println(result)
-
 	return result, nil
 }
 
@@ -157,15 +159,11 @@ func (c *ComplexWiresModule) handleN() {
 func (c *ComplexWiresModule) handleS() error {
 	var (
 		serial int
-		err    error
 	)
 	if c.serialCache != nil {
 		serial = *c.serialCache
 	} else {
-		serial, err = communication.AskInt("Letzte Ziffer der Seriennummer?")
-		if err != nil {
-			return err
-		}
+		serial = communication.AskInt("Letzte Ziffer der Seriennummer?")
 		c.serialCache = &serial
 	}
 

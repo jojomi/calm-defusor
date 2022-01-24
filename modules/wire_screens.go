@@ -15,6 +15,10 @@ func (x *WireScreensModule) Name() string {
 	return "Drahtfolgen"
 }
 
+func (x *WireScreensModule) String() string {
+	return x.Name()
+}
+
 func NewWireScreensModule() *WireScreensModule {
 	return &WireScreensModule{
 		allColors: []ktane.Color{
