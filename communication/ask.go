@@ -3,7 +3,7 @@ package communication
 import (
 	"fmt"
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/jojomi/calm-defusor/ktane_color"
+	"github.com/jojomi/calm-defusor/ktane"
 )
 
 func AskString(question string) (string, error) {
@@ -23,8 +23,8 @@ func AskInt(question string) (int, error) {
 	return i, err
 }
 
-func ChooseOneColor(question string, options []ktane_color.Color) (ktane_color.Color, error) {
-	return ChooseOneWithMapper[ktane_color.Color](question, options, func(color ktane_color.Color) string {
+func ChooseOneColor(question string, options []ktane.Color) (ktane.Color, error) {
+	return ChooseOneWithMapper[ktane.Color](question, options, func(color ktane.Color) string {
 		return color.BySysLocale()
 	})
 }

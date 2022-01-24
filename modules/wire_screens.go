@@ -3,12 +3,12 @@ package modules
 import (
 	"fmt"
 	"github.com/jojomi/calm-defusor/communication"
-	"github.com/jojomi/calm-defusor/ktane_color"
+	"github.com/jojomi/calm-defusor/ktane"
 	"github.com/jojomi/go-script/v2/interview"
 )
 
 type WireScreensModule struct {
-	allColors []ktane_color.Color
+	allColors []ktane.Color
 }
 
 func (x *WireScreensModule) Name() string {
@@ -17,17 +17,17 @@ func (x *WireScreensModule) Name() string {
 
 func NewWireScreensModule() *WireScreensModule {
 	return &WireScreensModule{
-		allColors: []ktane_color.Color{
-			ktane_color.ColorRed,
-			ktane_color.ColorBlue,
-			ktane_color.ColorBlack,
+		allColors: []ktane.Color{
+			ktane.ColorRed,
+			ktane.ColorBlue,
+			ktane.ColorBlack,
 		},
 	}
 }
 
 func (x *WireScreensModule) Solve() error {
-	connectionMap := map[ktane_color.Color][][]string{
-		ktane_color.ColorRed: {
+	connectionMap := map[ktane.Color][][]string{
+		ktane.ColorRed: {
 			{"C"},
 			{"B"},
 			{"A"},
@@ -38,7 +38,7 @@ func (x *WireScreensModule) Solve() error {
 			{"A", "B"},
 			{"B"},
 		},
-		ktane_color.ColorBlue: {
+		ktane.ColorBlue: {
 			{"B"},
 			{"A", "C"},
 			{"B"},
@@ -49,7 +49,7 @@ func (x *WireScreensModule) Solve() error {
 			{"A", "C"},
 			{"A"},
 		},
-		ktane_color.ColorBlack: {
+		ktane.ColorBlack: {
 			{"A", "B", "C"},
 			{"A", "C"},
 			{"B"},
@@ -64,14 +64,14 @@ func (x *WireScreensModule) Solve() error {
 
 	communication.Tell("Gehe dir Drähte von oben nach unten durch. Wenn alle dran waren, auf die nächste Tafel schalten und auf die gleiche Art weitermachen.")
 
-	colors := append(x.allColors, ktane_color.ColorNoMore)
+	colors := append(x.allColors, ktane.ColorNoMore)
 	var (
-		col    ktane_color.Color
+		col    ktane.Color
 		target string
 		err    error
 	)
 
-	colorIndex := make(map[ktane_color.Color]int)
+	colorIndex := make(map[ktane.Color]int)
 	for _, col := range x.allColors {
 		colorIndex[col] = 0
 	}
@@ -82,7 +82,7 @@ func (x *WireScreensModule) Solve() error {
 			return err
 		}
 
-		if col == ktane_color.ColorNoMore {
+		if col == ktane.ColorNoMore {
 			break
 		}
 

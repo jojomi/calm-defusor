@@ -3,13 +3,13 @@ package modules
 import (
 	"fmt"
 	"github.com/jojomi/calm-defusor/communication"
-	"github.com/jojomi/calm-defusor/ktane_color"
+	"github.com/jojomi/calm-defusor/ktane"
 	"github.com/jojomi/go-script/v2/interview"
 	"strings"
 )
 
 type SimonSaysModule struct {
-	allColors []ktane_color.Color
+	allColors []ktane.Color
 }
 
 func (s *SimonSaysModule) Name() string {
@@ -17,11 +17,11 @@ func (s *SimonSaysModule) Name() string {
 }
 
 func NewSimonSaysModule() *SimonSaysModule {
-	allColors := []ktane_color.Color{
-		ktane_color.ColorBlue,
-		ktane_color.ColorYellow,
-		ktane_color.ColorGreen,
-		ktane_color.ColorRed,
+	allColors := []ktane.Color{
+		ktane.ColorBlue,
+		ktane.ColorYellow,
+		ktane.ColorGreen,
+		ktane.ColorRed,
 	}
 	return &SimonSaysModule{
 		allColors: allColors,
@@ -45,18 +45,18 @@ func (s *SimonSaysModule) Solve() error {
 		return err
 	}
 
-	colorChoices := append(s.allColors, ktane_color.ColorNoMore)
+	colorChoices := append(s.allColors, ktane.ColorNoMore)
 	var (
-		colors       []ktane_color.Color
-		mappedColors []ktane_color.Color
-		mappedColor  ktane_color.Color
+		colors       []ktane.Color
+		mappedColors []ktane.Color
+		mappedColor  ktane.Color
 	)
 	for {
 		newColor, err := communication.ChooseOneColor("Neue/letzte Farbe?", colorChoices)
 		if err != nil {
 			return err
 		}
-		if newColor == ktane_color.ColorNoMore {
+		if newColor == ktane.ColorNoMore {
 			break
 		}
 		colors = append(colors, newColor)
@@ -65,9 +65,9 @@ func (s *SimonSaysModule) Solve() error {
 		mappedColors = append(mappedColors, mappedColor)
 
 		communication.Tellf("Folgende Farben nacheinander drücken: %s\n", strings.Join(
-			mapList[ktane_color.Color, string](
+			mapList[ktane.Color, string](
 				mappedColors,
-				func(c ktane_color.Color) string {
+				func(c ktane.Color) string {
 					return c.BySysLocale()
 				},
 			), ", "))
@@ -76,64 +76,64 @@ func (s *SimonSaysModule) Solve() error {
 	return nil
 }
 
-func (s *SimonSaysModule) getMappedColor(strikeCount int, hasVocal bool, color ktane_color.Color) ktane_color.Color {
+func (s *SimonSaysModule) getMappedColor(strikeCount int, hasVocal bool, color ktane.Color) ktane.Color {
 	if hasVocal {
 		return s.getVocalMappedColor(strikeCount, color)
 	}
 	return s.getNonVocalMappedColor(strikeCount, color)
 }
 
-func (s *SimonSaysModule) getVocalMappedColor(strikeCount int, color ktane_color.Color) ktane_color.Color {
-	colorMap := map[ktane_color.Color]ktane_color.Color{}
+func (s *SimonSaysModule) getVocalMappedColor(strikeCount int, color ktane.Color) ktane.Color {
+	colorMap := map[ktane.Color]ktane.Color{}
 	switch strikeCount {
 	case 0:
-		colorMap = map[ktane_color.Color]ktane_color.Color{
-			ktane_color.ColorRed:    ktane_color.ColorBlue,
-			ktane_color.ColorBlue:   ktane_color.ColorRed,
-			ktane_color.ColorGreen:  ktane_color.ColorYellow,
-			ktane_color.ColorYellow: ktane_color.ColorGreen,
+		colorMap = map[ktane.Color]ktane.Color{
+			ktane.ColorRed:    ktane.ColorBlue,
+			ktane.ColorBlue:   ktane.ColorRed,
+			ktane.ColorGreen:  ktane.ColorYellow,
+			ktane.ColorYellow: ktane.ColorGreen,
 		}
 	case 1:
-		colorMap = map[ktane_color.Color]ktane_color.Color{
-			ktane_color.ColorRed:    ktane_color.ColorYellow,
-			ktane_color.ColorBlue:   ktane_color.ColorGreen,
-			ktane_color.ColorGreen:  ktane_color.ColorBlue,
-			ktane_color.ColorYellow: ktane_color.ColorRed,
+		colorMap = map[ktane.Color]ktane.Color{
+			ktane.ColorRed:    ktane.ColorYellow,
+			ktane.ColorBlue:   ktane.ColorGreen,
+			ktane.ColorGreen:  ktane.ColorBlue,
+			ktane.ColorYellow: ktane.ColorRed,
 		}
 	case 2:
-		colorMap = map[ktane_color.Color]ktane_color.Color{
-			ktane_color.ColorRed:    ktane_color.ColorGreen,
-			ktane_color.ColorBlue:   ktane_color.ColorRed,
-			ktane_color.ColorGreen:  ktane_color.ColorYellow,
-			ktane_color.ColorYellow: ktane_color.ColorBlue,
+		colorMap = map[ktane.Color]ktane.Color{
+			ktane.ColorRed:    ktane.ColorGreen,
+			ktane.ColorBlue:   ktane.ColorRed,
+			ktane.ColorGreen:  ktane.ColorYellow,
+			ktane.ColorYellow: ktane.ColorBlue,
 		}
 	}
 	return colorMap[color]
 }
 
-func (s *SimonSaysModule) getNonVocalMappedColor(strikeCount int, color ktane_color.Color) ktane_color.Color {
-	colorMap := map[ktane_color.Color]ktane_color.Color{}
+func (s *SimonSaysModule) getNonVocalMappedColor(strikeCount int, color ktane.Color) ktane.Color {
+	colorMap := map[ktane.Color]ktane.Color{}
 	switch strikeCount {
 	case 0:
-		colorMap = map[ktane_color.Color]ktane_color.Color{
-			ktane_color.ColorRed:    ktane_color.ColorBlue,
-			ktane_color.ColorBlue:   ktane_color.ColorYellow,
-			ktane_color.ColorGreen:  ktane_color.ColorGreen,
-			ktane_color.ColorYellow: ktane_color.ColorRed,
+		colorMap = map[ktane.Color]ktane.Color{
+			ktane.ColorRed:    ktane.ColorBlue,
+			ktane.ColorBlue:   ktane.ColorYellow,
+			ktane.ColorGreen:  ktane.ColorGreen,
+			ktane.ColorYellow: ktane.ColorRed,
 		}
 	case 1:
-		colorMap = map[ktane_color.Color]ktane_color.Color{
-			ktane_color.ColorRed:    ktane_color.ColorRed,
-			ktane_color.ColorBlue:   ktane_color.ColorBlue,
-			ktane_color.ColorGreen:  ktane_color.ColorYellow,
-			ktane_color.ColorYellow: ktane_color.ColorGreen,
+		colorMap = map[ktane.Color]ktane.Color{
+			ktane.ColorRed:    ktane.ColorRed,
+			ktane.ColorBlue:   ktane.ColorBlue,
+			ktane.ColorGreen:  ktane.ColorYellow,
+			ktane.ColorYellow: ktane.ColorGreen,
 		}
 	case 2:
-		colorMap = map[ktane_color.Color]ktane_color.Color{
-			ktane_color.ColorRed:    ktane_color.ColorYellow,
-			ktane_color.ColorBlue:   ktane_color.ColorGreen,
-			ktane_color.ColorGreen:  ktane_color.ColorBlue,
-			ktane_color.ColorYellow: ktane_color.ColorRed,
+		colorMap = map[ktane.Color]ktane.Color{
+			ktane.ColorRed:    ktane.ColorYellow,
+			ktane.ColorBlue:   ktane.ColorGreen,
+			ktane.ColorGreen:  ktane.ColorBlue,
+			ktane.ColorYellow: ktane.ColorRed,
 		}
 	}
 	return colorMap[color]

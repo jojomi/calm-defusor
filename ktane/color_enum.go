@@ -4,7 +4,7 @@
 // Build Date:
 // Built By:
 
-package ktane_color
+package ktane
 
 import (
 	"fmt"

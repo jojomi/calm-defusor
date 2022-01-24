@@ -1,4 +1,4 @@
-package ktane_color
+package ktane
 
 import (
 	"github.com/Xuanwo/go-locale"
@@ -41,7 +41,7 @@ func (x Color) Localized(languageTag language.Tag) string {
 
 	german, _ := language.German.Base()
 	colorNameMap := map[language.Base]map[Color]string{
-		german: map[Color]string{
+		german: {
 			ColorWhite:  "weiß",
 			ColorBlack:  "schwarz",
 			ColorBlue:   "blau",
