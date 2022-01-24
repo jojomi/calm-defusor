@@ -12,3 +12,13 @@ func mapList[T, U any](in []T, mapperFunc func(t T) U) []U {
 	}
 	return result
 }
+
+func inArray[T comparable](array []T, elem T) bool {
+	for _, t := range array {
+		if t != elem {
+			continue
+		}
+		return true
+	}
+	return false
+}

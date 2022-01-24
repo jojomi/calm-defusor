@@ -11,9 +11,9 @@ Can solve
 * Memory
 * Simon says
 * complex wires
+* wire screens
 
 Next modules
-* wire screens
 * Morse
 * 6 words
 * symbols
