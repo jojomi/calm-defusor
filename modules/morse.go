@@ -9,7 +9,8 @@ import (
 )
 
 type MorseModule struct {
-	morseLetters []string
+	maxWordLength int
+	morseLetters  []string
 }
 
 func (x MorseModule) Name() string {
@@ -21,11 +22,18 @@ func (x MorseModule) String() string {
 }
 
 func NewMorseModule() *MorseModule {
-	return &MorseModule{}
+	mod := &MorseModule{}
+	mod.Reset()
+	return mod
 }
 
 func (x *MorseModule) Reset() error {
 	x.morseLetters = []string{}
+
+	x.maxWordLength = maxMapper[string, int](x.getTexts(), func(in string) int {
+		return len(in)
+	})
+
 	return nil
 }
 
@@ -74,8 +82,7 @@ func (x *MorseModule) Solve() error {
 }
 
 func (x MorseModule) printState() {
-	fmt.Print("Aktuelles Teilwort: ")
-	fmt.Println(x.mapMorseListToString(x.morseLetters))
+	fmt.Printf("Aktuelles Teilwort: %s\n", x.mapMorseListToString(x.morseLetters))
 	possibleTexts := x.getPossibleTexts()
 	fmt.Printf("Mögliche Worte (%d): %s\n\n", len(possibleTexts), strings.Join(possibleTexts, ", "))
 }
@@ -94,6 +101,18 @@ func (x *MorseModule) mapMorseListToString(morse []string) string {
 		sb.WriteString(v)
 	}
 	return sb.String()
+}
+
+func (x *MorseModule) mapMorseListToLimitedString(morse []string) string {
+	val := x.mapMorseListToString(morse)
+	runes := []rune(val)
+
+	// cut off start
+	if len(runes) > x.maxWordLength {
+		return string(runes[len(runes)-x.maxWordLength:])
+	}
+
+	return val
 }
 
 func (x *MorseModule) mapMorseToString(morse string) (string, error) {
@@ -197,6 +216,6 @@ func (x MorseModule) isPossible(text string) bool {
 	if len(x.morseLetters) == 0 {
 		return true
 	}
-	r := regexp.MustCompile(x.mapMorseListToString(x.morseLetters))
+	r := regexp.MustCompile(x.mapMorseListToLimitedString(x.morseLetters))
 	return r.FindString(text+text) != ""
 }

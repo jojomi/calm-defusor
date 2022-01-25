@@ -12,9 +12,9 @@ Can solve
 * Simon says
 * complex wires
 * wire screens
+* Morse
 
 Next modules
-* Morse
 * 6 words
 * symbols
 * maze
