@@ -39,6 +39,7 @@ func main() {
 		}
 
 		isFirstModule = false
+		mod.Reset()
 		err = mod.Solve()
 		if err != nil {
 			if err == terminal.InterruptErr {

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/jojomi/calm-defusor/communication"
 	"github.com/jojomi/calm-defusor/ktane"
-	"github.com/jojomi/go-script/v2/interview"
 )
 
 type WireScreensModule struct {
@@ -85,16 +84,16 @@ func (x *WireScreensModule) Solve() error {
 	}
 
 	for {
-		col, err = communication.ChooseOneColor("Farbe Draht?", colors)
+		col, err = communication.ChooseOneColor("Farbe nächster Draht?", colors)
 		if err != nil {
 			return err
 		}
 
-		if col == ktane.ColorNoMore {
+		if col.IsNoMore() {
 			break
 		}
 
-		target, err = interview.ChooseOneString("Geht zu?", []string{"A", "B", "C"})
+		target, err = communication.ChooseOneString("Geht zu?", []string{"A", "B", "C"})
 		if err != nil {
 			return err
 		}

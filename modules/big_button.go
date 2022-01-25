@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/jojomi/calm-defusor/communication"
 	"github.com/jojomi/calm-defusor/ktane"
-	"github.com/jojomi/go-script/v2/interview"
 	"github.com/rs/zerolog/log"
 )
 
@@ -50,7 +49,7 @@ func (b *BigButtonModule) Solve() error {
 	}
 
 	// 1.
-	if color == ktane.ColorBlue {
+	if color.IsBlue() {
 		text, err := b.getText()
 		if err != nil {
 			return err
@@ -62,7 +61,10 @@ func (b *BigButtonModule) Solve() error {
 	}
 
 	// 2.
-	numBatteries := communication.AskInt("Anzahl Batterien an der Bombe?")
+	numBatteries, err := communication.AskInt("Anzahl Batterien an der Bombe?")
+	if err != nil {
+		return err
+	}
 	if numBatteries > 1 {
 		text, err := b.getText()
 		if err != nil {
@@ -76,8 +78,8 @@ func (b *BigButtonModule) Solve() error {
 	}
 
 	// 3.
-	if color == ktane.ColorWhite {
-		carIndicator, err := interview.ConfirmNoDefault("Hat die Bombe einen CAR Indikator?")
+	if color.IsWhite() {
+		carIndicator, err := communication.ConfirmNoDefault("Hat die Bombe einen CAR Indikator?")
 		if err != nil {
 			return err
 		}
@@ -89,7 +91,7 @@ func (b *BigButtonModule) Solve() error {
 
 	// 4.
 	if numBatteries > 2 {
-		frkIndicator, err := interview.ConfirmNoDefault("Hat die Bombe einen FRK Indikator?")
+		frkIndicator, err := communication.ConfirmNoDefault("Hat die Bombe einen FRK Indikator?")
 		if err != nil {
 			return err
 		}
@@ -101,13 +103,13 @@ func (b *BigButtonModule) Solve() error {
 	}
 
 	// 5.
-	if color == ktane.ColorYellow {
+	if color.IsYellow() {
 		log.Info().Msg("Regel 5 triggered")
 		return b.timedRelease()
 	}
 
 	// 6.
-	if color == ktane.ColorRed {
+	if color.IsRed() {
 		text, err := b.getText()
 		if err != nil {
 			return err
@@ -130,7 +132,7 @@ func (b *BigButtonModule) tap() {
 
 func (b *BigButtonModule) timedRelease() error {
 	communication.Tell("Knopf drücken und gedrückt halten.")
-	color, err := interview.ChooseOneString("Farbe Streifen?", b.allStripColors)
+	color, err := communication.ChooseOneString("Farbe Streifen?", b.allStripColors)
 	if err != nil {
 		return err
 	}
@@ -146,14 +148,14 @@ func (b *BigButtonModule) timedRelease() error {
 }
 
 func (b *BigButtonModule) releaseAt(value int) {
-	communication.Tell(fmt.Sprintf("Knopf loslassen, wenn der Timer an einer beliebigen Stelle eine %d enthält.", value))
+	communication.Tell(fmt.Sprintf("Knopf loslassen, wenn der Timer irgendwo eine %d enthält.", value))
 }
 
 func (b *BigButtonModule) getText() (string, error) {
 	if b.textCache != nil {
 		return *b.textCache, nil
 	}
-	text, err := interview.ChooseOneString("Text auf dem Knopf?", b.allTexts)
+	text, err := communication.ChooseOneString("Text auf dem Knopf?", b.allTexts)
 	b.textCache = &text
 	return text, err
 }

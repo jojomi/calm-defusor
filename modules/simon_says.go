@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/jojomi/calm-defusor/communication"
 	"github.com/jojomi/calm-defusor/ktane"
-	"github.com/jojomi/go-script/v2/interview"
 	"strings"
 )
 
@@ -48,7 +47,7 @@ func (s *SimonSaysModule) Solve() error {
 		return err
 	}
 
-	hasVocal, err := interview.ConfirmNoDefault("Enthält die Seriennummer einen Vokal?")
+	hasVocal, err := communication.ConfirmNoDefault("Enthält die Seriennummer einen Vokal?")
 	if err != nil {
 		return err
 	}
@@ -64,7 +63,7 @@ func (s *SimonSaysModule) Solve() error {
 		if err != nil {
 			return err
 		}
-		if newColor == ktane.ColorNoMore {
+		if newColor.IsNoMore() {
 			break
 		}
 		colors = append(colors, newColor)
@@ -72,7 +71,7 @@ func (s *SimonSaysModule) Solve() error {
 		mappedColor = s.getMappedColor(strikeCount, hasVocal, newColor)
 		mappedColors = append(mappedColors, mappedColor)
 
-		communication.Tellf("Folgende Farben nacheinander drücken: %s\n", strings.Join(
+		communication.Tellf("Folgende Farben nacheinander drücken: %s\n\n", strings.Join(
 			mapList[ktane.Color, string](
 				mappedColors,
 				func(c ktane.Color) string {

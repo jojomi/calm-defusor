@@ -3,7 +3,6 @@ package modules
 import (
 	"fmt"
 	"github.com/jojomi/calm-defusor/communication"
-	"github.com/jojomi/go-script/v2/interview"
 )
 
 // Optimization: Ask for number of wires upfront and tell to cut last before talking about it if not yet solved
@@ -70,7 +69,7 @@ func (c *ComplexWiresModule) Solve() error {
 func (c *ComplexWiresModule) getWireValue() (int, error) {
 	result := 0
 
-	hasRed, err := interview.ConfirmNoDefault("Hat der Draht Rotanteil?")
+	hasRed, err := communication.ConfirmNoDefault("Hat der Draht Rotanteil?")
 	if err != nil {
 		return 0, err
 	}
@@ -78,7 +77,7 @@ func (c *ComplexWiresModule) getWireValue() (int, error) {
 		result = result | complexWiresHasRed
 	}
 
-	hasBlue, err := interview.ConfirmNoDefault("Hat der Draht Blauanteil?")
+	hasBlue, err := communication.ConfirmNoDefault("Hat der Draht Blauanteil?")
 	if err != nil {
 		return 0, err
 	}
@@ -86,7 +85,7 @@ func (c *ComplexWiresModule) getWireValue() (int, error) {
 		result = result | complexWiresHasBlue
 	}
 
-	hasLED, err := interview.ConfirmNoDefault("Leuchtet die runde LED oben?")
+	hasLED, err := communication.ConfirmNoDefault("Leuchtet die runde LED oben?")
 	if err != nil {
 		return 0, err
 	}
@@ -94,7 +93,7 @@ func (c *ComplexWiresModule) getWireValue() (int, error) {
 		result = result | complexWiresHasLED
 	}
 
-	hasStar, err := interview.ConfirmNoDefault("Leuchtet der Stern unten?")
+	hasStar, err := communication.ConfirmNoDefault("Leuchtet der Stern unten?")
 	if err != nil {
 		return 0, err
 	}
@@ -149,21 +148,25 @@ func (c *ComplexWiresModule) handleWire(val int) error {
 }
 
 func (c *ComplexWiresModule) handleD() {
-	communication.Tell("Draht durchtrennen! Alle exakt gleichen Drähte, egal wo, auch durchtrennen.")
+	communication.Tell("Draht durchtrennen!\nAlle exakt gleichen Drähte, egal wo, auch durchtrennen.")
 }
 
 func (c *ComplexWiresModule) handleN() {
-	communication.Tell("Draht NICHT durchtrennen! Alle exakt gleichen Drähte, egal wo, nicht mehr mitteilen.")
+	communication.Tell("Draht NICHT durchtrennen!\nAlle exakt gleichen Drähte, egal wo, nicht mehr mitteilen.")
 }
 
 func (c *ComplexWiresModule) handleS() error {
 	var (
 		serial int
+		err    error
 	)
 	if c.serialCache != nil {
 		serial = *c.serialCache
 	} else {
-		serial = communication.AskInt("Letzte Ziffer der Seriennummer?")
+		serial, err = communication.AskInt("Letzte Ziffer der Seriennummer?")
+		if err != nil {
+			return err
+		}
 		c.serialCache = &serial
 	}
 
@@ -183,7 +186,7 @@ func (c *ComplexWiresModule) handleP() error {
 	if c.hasParallelPortCache != nil {
 		hasParallelPort = *c.hasParallelPortCache
 	} else {
-		hasParallelPort, err = interview.ConfirmNoDefault("Gibt es einen Parallel-Port-Anschluss?")
+		hasParallelPort, err = communication.ConfirmNoDefault("Gibt es einen Parallel-Port-Anschluss?")
 		if err != nil {
 			return err
 		}
@@ -206,7 +209,7 @@ func (c *ComplexWiresModule) handleB() error {
 	if c.hasMoreThanOneBatteryCache != nil {
 		hasMoreThanOneBattery = *c.hasMoreThanOneBatteryCache
 	} else {
-		hasMoreThanOneBattery, err = interview.ConfirmNoDefault("Gibt es MEHR als eine Batterie?")
+		hasMoreThanOneBattery, err = communication.ConfirmNoDefault("Gibt es MEHR als eine Batterie?")
 		if err != nil {
 			return err
 		}

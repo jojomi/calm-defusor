@@ -62,28 +62,29 @@ func NewPasswordModule() *PasswordModule {
 		"zange",
 	}
 
-	length := len(words[0])
+	module := &PasswordModule{
+		words: words,
+	}
+	module.Reset()
+
+	return module
+}
+
+func (p *PasswordModule) Reset() error {
+	length := len(p.words[0])
 	letters := make([]*LetterState, length)
 	for i := 0; i < length; i++ {
 		letters[i] = NewLetterState()
 	}
-
-	return &PasswordModule{
-		words:   words,
-		letters: letters,
-	}
-
-}
-
-func (p *PasswordModule) Reset() error {
-	p.letters = make([]*LetterState, 0)
+	p.letters = letters
 	return nil
 }
 
 func (p *PasswordModule) Solve() error {
 	wordLength := p.getWordLength()
 	for letterIndex := 0; letterIndex < wordLength; letterIndex++ {
-		communication.Tellf("Lies nacheinander alle möglichen Buchstaben für die %d. Stelle vor!", letterIndex+1)
+		communication.AskPrintf("Lies nacheinander alle möglichen Buchstaben für die %d. Stelle vor!", letterIndex+1)
+		fmt.Printf("\n> ")
 
 		var (
 			s           string
@@ -116,7 +117,7 @@ func (p *PasswordModule) Solve() error {
 			}
 		}
 		if solution := p.getSolution(); solution != nil {
-			communication.Tellf(`Die Lösung ist "%s".`, communication.SafeWord(*solution))
+			communication.Tellf(`Die Lösung ist "%s".\n`, communication.SafeWord(*solution))
 			break
 		} else {
 			possibleWords := p.getPossibleWords()

@@ -5,11 +5,19 @@ import (
 	"github.com/gookit/color"
 )
 
-func Tell(text string) {
+func TellSprint(text string) string {
 	colorPrinter := color.New(color.FgYellow, color.BgBlack, color.Bold)
-	colorPrinter.Println(text)
+	return colorPrinter.Sprint(text)
+}
+
+func TellSprintf(text string, values ...interface{}) string {
+	return TellSprint(fmt.Sprintf(text, values...))
+}
+
+func Tell(text string) {
+	fmt.Println(TellSprint(text))
 }
 
 func Tellf(text string, values ...interface{}) {
-	Tell(fmt.Sprintf(text, values...))
+	fmt.Print(TellSprintf(text, values...))
 }

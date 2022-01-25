@@ -49,7 +49,7 @@ func (s *SimpleWiresModule) Solve() error {
 			return err
 		}
 
-		if color == ktane.ColorNoMore {
+		if color.IsNoMore() {
 			break
 		}
 
@@ -59,114 +59,124 @@ func (s *SimpleWiresModule) Solve() error {
 			break
 		}
 	}
-	fmt.Println(s.colors)
 
 	// evaluate and ask more
 	switch len(s.colors) {
 	case 3:
-		s.handleThree()
+		return s.handleThree()
 	case 4:
-		s.handleFour()
+		return s.handleFour()
 	case 5:
-		s.handleFive()
+		return s.handleFive()
 	case 6:
-		s.handleSix()
+		return s.handleSix()
 	}
 	return nil
 }
 
-func (s SimpleWiresModule) handleThree() {
+func (s SimpleWiresModule) handleThree() error {
 	if s.countColor(ktane.ColorRed) == 0 {
 		s.cut(2)
-		return
+		return nil
 	}
-	if s.colors[2] == ktane.ColorWhite {
+	if s.colors[2].IsWhite() {
 		s.cut(3)
 	}
 	if s.countColor(ktane.ColorBlue) > 1 {
 		s.cut(s.getLastIndex(ktane.ColorBlue) + 1)
-		return
+		return nil
 	}
 	s.cut(3)
+	return nil
 }
 
-func (s SimpleWiresModule) handleFour() {
+func (s SimpleWiresModule) handleFour() error {
 	if s.countColor(ktane.ColorRed) > 1 {
-		serial := communication.AskInt("Letzte Ziffer der Seriennummer?")
+		serial, err := communication.AskInt("Letzte Ziffer der Seriennummer?")
+		if err != nil {
+			return err
+		}
 		if serial%2 == 1 {
 			s.cut(s.getLastIndex(ktane.ColorRed) + 1)
-			return
+			return nil
 		}
 	}
 
-	if s.colors[3] == ktane.ColorYellow && s.countColor(ktane.ColorRed) == 0 {
+	if s.colors[3].IsYellow() && s.countColor(ktane.ColorRed) == 0 {
 		s.cut(1)
-		return
+		return nil
 	}
 
 	if s.countColor(ktane.ColorBlue) == 1 {
 		s.cut(1)
-		return
+		return nil
 	}
 
 	if s.countColor(ktane.ColorYellow) > 1 {
 		s.cut(4)
-		return
+		return nil
 	}
 
 	s.cut(2)
-	return
+	return nil
 }
 
-func (s SimpleWiresModule) handleFive() {
-	if s.colors[4] == ktane.ColorBlack {
-		serial := communication.AskInt("Letzte Ziffer der Seriennummer?")
+func (s SimpleWiresModule) handleFive() error {
+	if s.colors[4].IsBlack() {
+		serial, err := communication.AskInt("Letzte Ziffer der Seriennummer?")
+		if err != nil {
+			return err
+		}
 		if serial%2 == 1 {
 			s.cut(4)
-			return
+			return nil
 		}
 	}
 
 	if s.countColor(ktane.ColorRed) == 1 && s.countColor(ktane.ColorYellow) > 1 {
 		s.cut(1)
-		return
+		return nil
 	}
 
 	if s.countColor(ktane.ColorBlack) == 0 {
 		s.cut(2)
-		return
+		return nil
 	}
 
 	s.cut(1)
-	return
+	return nil
 }
 
-func (s SimpleWiresModule) handleSix() {
+func (s SimpleWiresModule) handleSix() error {
 	if s.countColor(ktane.ColorYellow) == 0 {
-		serial := communication.AskInt("Letzte Ziffer der Seriennummer?")
+		serial, err := communication.AskInt("Letzte Ziffer der Seriennummer?")
+		if err != nil {
+			return err
+		}
 		if serial%2 == 1 {
 			s.cut(3)
-			return
+			return nil
 		}
 	}
 
 	if s.countColor(ktane.ColorYellow) == 1 && s.countColor(ktane.ColorWhite) > 1 {
 		s.cut(4)
-		return
+		return nil
 	}
 
 	if s.countColor(ktane.ColorRed) == 0 {
 		s.cut(6)
-		return
+		return nil
 	}
 
 	s.cut(4)
-	return
+	return nil
 }
 
 // one-based!
 func (s SimpleWiresModule) cut(index int) {
-	communication.Tellf("%d. Draht trennen (dieser hat die Farbe %s)", index, s.colors[index-1].BySysLocaleForTerminal())
+	communication.Tellf("%d. Draht trennen (dieser hat die Farbe %s", index, s.colors[index-1].BySysLocaleForTerminal())
+	communication.Tellf(")")
 }
 
 func (s SimpleWiresModule) countColor(searchColor ktane.Color) int {

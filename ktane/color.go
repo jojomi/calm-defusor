@@ -52,6 +52,34 @@ func (x Color) BySysLocaleForTerminal() string {
 	return colorPrinter.Render(" " + value + " ")
 }
 
+func (x Color) IsRed() bool {
+	return x == ColorRed
+}
+
+func (x Color) IsGreen() bool {
+	return x == ColorGreen
+}
+
+func (x Color) IsYellow() bool {
+	return x == ColorYellow
+}
+
+func (x Color) IsBlue() bool {
+	return x == ColorBlue
+}
+
+func (x Color) IsWhite() bool {
+	return x == ColorWhite
+}
+
+func (x Color) IsBlack() bool {
+	return x == ColorBlack
+}
+
+func (x Color) IsNoMore() bool {
+	return x == ColorNoMore
+}
+
 func (x Color) Localized(languageTag language.Tag) string {
 	matcher := language.NewMatcher([]language.Tag{
 		language.German,

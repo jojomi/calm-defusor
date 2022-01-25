@@ -15,6 +15,7 @@ func SafeWord(input string) string {
 		"ferse": "wie am Fuß",
 		"verse": "wie im Gedicht",
 		"knapp": "wie eng",
+		"knopf": "wie am Hemd",
 		"sehne": "wie Achillessehne",
 		"sende": "wie verschicke",
 	}
