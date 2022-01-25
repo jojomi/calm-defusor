@@ -117,7 +117,7 @@ func (p *PasswordModule) Solve() error {
 			}
 		}
 		if solution := p.getSolution(); solution != nil {
-			communication.Tellf(`Die Lösung ist "%s".\n`, communication.SafeWord(*solution))
+			communication.Tellf("Die Lösung ist \"%s\".\n", communication.SafeWord(*solution))
 			break
 		} else {
 			possibleWords := p.getPossibleWords()
