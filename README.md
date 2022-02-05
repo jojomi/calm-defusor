@@ -14,7 +14,7 @@ Can solve
 * wire screens
 * Morse
 * 6 words
+* symbols
 
 Next modules
-* symbols
 * maze

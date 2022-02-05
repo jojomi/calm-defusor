@@ -15,6 +15,7 @@ func (m ModuleList) All() []Module {
 func (m *ModuleList) AddAllAvailable() *ModuleList {
 	m.AddModule(NewSimpleWiresModule())
 	m.AddModule(NewBigButtonModule())
+	m.AddModule(NewSymbolsModule())
 	m.AddModule(NewSimonSaysModule())
 	m.AddModule(NewSixWordsModule())
 	m.AddModule(NewMemoryModule())
