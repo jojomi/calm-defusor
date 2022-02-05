@@ -13,8 +13,8 @@ Can solve
 * complex wires
 * wire screens
 * Morse
+* 6 words
 
 Next modules
-* 6 words
 * symbols
 * maze

@@ -11,8 +11,9 @@ import (
 // entropy analysis to skip a character or even optimize the order by entropy completely
 
 type PasswordModule struct {
-	words   []string
-	letters []*LetterState
+	words    []string
+	wordList map[string]string
+	letters  []*LetterState
 }
 
 func (p *PasswordModule) Name() string {
@@ -61,9 +62,26 @@ func NewPasswordModule() *PasswordModule {
 		"warte",
 		"zange",
 	}
+	wordList := map[string]string{
+		"mathe": "wie Mathematik",
+		"matte": "wie Gymnastikmatte",
+		"saite": "wie bei der Geige",
+		"seite": "wie beim Würfel",
+		"leere": "wie das Vakuum",
+		"lehre": "wie die Ausbildung",
+		"druck": "mit U wie Ullrich",
+		"drück": "mit Ü wie Überschall",
+		"ferse": "wie am Fuß",
+		"verse": "wie im Gedicht",
+		"knapp": "wie eng",
+		"knopf": "wie am Hemd",
+		"sehne": "wie Achillessehne",
+		"sende": "wie verschicke",
+	}
 
 	module := &PasswordModule{
-		words: words,
+		words:    words,
+		wordList: wordList,
 	}
 	module.Reset()
 
@@ -117,7 +135,7 @@ func (p *PasswordModule) Solve() error {
 			}
 		}
 		if solution := p.getSolution(); solution != nil {
-			communication.Tellf("Die Lösung ist \"%s\".\n", communication.SafeWord(*solution))
+			communication.Tellf("Die Lösung ist \"%s\".\n", communication.SafeWord(*solution, p.wordList))
 			break
 		} else {
 			possibleWords := p.getPossibleWords()
