@@ -135,7 +135,7 @@ func (m *MemoryModule) pushPos(pos int) error {
 		err   error
 	)
 	for {
-		value, err = communication.AskInt(fmt.Sprintf("Wie lautet die %d. kleine Zahl?", pos))
+		value, err = communication.AskInt(fmt.Sprintf("Die %d. Position drücken. Wie hieß die Zahl?", pos))
 		if err != nil {
 			return err
 		}
@@ -149,13 +149,12 @@ func (m *MemoryModule) pushPos(pos int) error {
 		Position: pos,
 		Value:    value,
 	})
-	communication.Tell(fmt.Sprintf("Diese Zahl drücken. Es ist die %d an Position %d von links.", value, pos))
 	fmt.Println()
 	return nil
 }
 
 func (m *MemoryModule) pushValue(value int) error {
-	pos, err := communication.AskInt(fmt.Sprintf("An welcher Position steht die kleine %d?", value))
+	pos, err := communication.AskInt(fmt.Sprintf("Die %d drücken. An welcher Position stand sie?", value))
 	if err != nil {
 		return err
 	}
@@ -163,7 +162,6 @@ func (m *MemoryModule) pushValue(value int) error {
 		Position: pos,
 		Value:    value,
 	})
-	communication.Tell(fmt.Sprintf("Diese Zahl drücken. Es ist die %d an Position %d von links.", value, pos))
 	fmt.Println()
 	return nil
 }
@@ -172,7 +170,7 @@ func (m *MemoryModule) pushPosLike(step int) error {
 	pos := m.steps[step-1].Position
 
 	if m.tellOnly {
-		communication.Tell(fmt.Sprintf("%d. Zahl von links drücken.", pos))
+		communication.Tell(fmt.Sprintf("%d. Position drücken.", pos))
 		return nil
 	}
 
