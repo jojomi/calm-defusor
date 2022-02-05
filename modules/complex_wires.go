@@ -2,6 +2,7 @@ package modules
 
 import (
 	"fmt"
+
 	"github.com/jojomi/calm-defusor/communication"
 )
 
@@ -124,7 +125,7 @@ func (c *ComplexWiresModule) handleWire(val int) error {
 	case complexWiresHasRed | complexWiresHasLED:
 		return c.handleB()
 	case complexWiresHasRed | complexWiresHasStar:
-		return c.handleB()
+		c.handleD()
 	case complexWiresHasBlue | complexWiresHasLED:
 		return c.handleP()
 	case complexWiresHasBlue | complexWiresHasStar:
