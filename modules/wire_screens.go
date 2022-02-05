@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jojomi/calm-defusor/communication"
 	"github.com/jojomi/calm-defusor/ktane"
+	"github.com/jojomi/calm-defusor/state"
 )
 
 type WireScreensModule struct {
@@ -28,11 +29,11 @@ func NewWireScreensModule() *WireScreensModule {
 	}
 }
 
-func (x *WireScreensModule) Reset() error {
+func (x *WireScreensModule) Reset(_ *state.BombState) error {
 	return nil
 }
 
-func (x *WireScreensModule) Solve() error {
+func (x *WireScreensModule) Solve(_ *state.BombState) error {
 	connectionMap := map[ktane.Color][][]string{
 		ktane.ColorRed: {
 			{"C"},

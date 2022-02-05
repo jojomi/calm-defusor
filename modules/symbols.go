@@ -3,8 +3,10 @@ package modules
 import (
 	"errors"
 	"fmt"
+
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/jojomi/calm-defusor/communication"
+	"github.com/jojomi/calm-defusor/state"
 	"github.com/rs/zerolog/log"
 )
 
@@ -35,11 +37,11 @@ func NewSymbolsModule() *SymbolsModule {
 	}
 }
 
-func (x *SymbolsModule) Reset() error {
+func (x *SymbolsModule) Reset(_ *state.BombState) error {
 	return nil
 }
 
-func (x *SymbolsModule) Solve() error {
+func (x *SymbolsModule) Solve(_ *state.BombState) error {
 	numSymbols := 4
 
 	allSymbols := x.allSymbols()

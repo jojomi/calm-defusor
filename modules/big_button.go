@@ -2,8 +2,10 @@ package modules
 
 import (
 	"fmt"
+
 	"github.com/jojomi/calm-defusor/communication"
 	"github.com/jojomi/calm-defusor/ktane"
+	"github.com/jojomi/calm-defusor/state"
 	"github.com/rs/zerolog/log"
 )
 
@@ -37,12 +39,12 @@ func NewBigButtonModule() *BigButtonModule {
 	}
 }
 
-func (b *BigButtonModule) Reset() error {
+func (b *BigButtonModule) Reset(_ *state.BombState) error {
 	b.textCache = nil
 	return nil
 }
 
-func (b *BigButtonModule) Solve() error {
+func (b *BigButtonModule) Solve(bombState *state.BombState) error {
 	color, err := communication.ChooseOneColor("Farbe Knopf?", b.allColors)
 	if err != nil {
 		return err
@@ -61,7 +63,7 @@ func (b *BigButtonModule) Solve() error {
 	}
 
 	// 2.
-	numBatteries, err := communication.AskInt("Anzahl Batterien an der Bombe?")
+	numBatteries, err := bombState.Batteries.GetCount()
 	if err != nil {
 		return err
 	}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jojomi/calm-defusor/communication"
+	"github.com/jojomi/calm-defusor/state"
 )
 
 // Optimization: Ask for number of wires upfront and tell to cut last before talking about it if not yet solved
@@ -16,9 +17,7 @@ const (
 )
 
 type ComplexWiresModule struct {
-	serialCache                *int
-	hasParallelPortCache       *bool
-	hasMoreThanOneBatteryCache *bool
+	hasParallelPortCache *bool
 }
 
 func (c ComplexWiresModule) Name() string {
@@ -33,14 +32,12 @@ func NewComplexWiresModule() *ComplexWiresModule {
 	return &ComplexWiresModule{}
 }
 
-func (c *ComplexWiresModule) Reset() error {
-	c.serialCache = nil
+func (c *ComplexWiresModule) Reset(_ *state.BombState) error {
 	c.hasParallelPortCache = nil
-	c.hasMoreThanOneBatteryCache = nil
 	return nil
 }
 
-func (c *ComplexWiresModule) Solve() error {
+func (c *ComplexWiresModule) Solve(bombState *state.BombState) error {
 	index := 1
 
 	var (
@@ -57,7 +54,7 @@ func (c *ComplexWiresModule) Solve() error {
 			return err
 		}
 
-		err = c.handleWire(val)
+		err = c.handleWire(val, bombState)
 		if err != nil {
 			return err
 		}
@@ -105,7 +102,7 @@ func (c *ComplexWiresModule) getWireValue() (int, error) {
 	return result, nil
 }
 
-func (c *ComplexWiresModule) handleWire(val int) error {
+func (c *ComplexWiresModule) handleWire(val int, bombState *state.BombState) error {
 	switch val {
 	// all four
 	case complexWiresHasRed | complexWiresHasBlue | complexWiresHasLED | complexWiresHasStar:
@@ -114,16 +111,16 @@ func (c *ComplexWiresModule) handleWire(val int) error {
 	case complexWiresHasBlue | complexWiresHasLED | complexWiresHasStar:
 		return c.handleP()
 	case complexWiresHasRed | complexWiresHasLED | complexWiresHasStar:
-		return c.handleB()
+		return c.handleB(bombState)
 	case complexWiresHasRed | complexWiresHasBlue | complexWiresHasStar:
 		return c.handleP()
 	case complexWiresHasRed | complexWiresHasBlue | complexWiresHasLED:
-		return c.handleS()
+		return c.handleS(bombState)
 	// two
 	case complexWiresHasRed | complexWiresHasBlue:
-		return c.handleS()
+		return c.handleS(bombState)
 	case complexWiresHasRed | complexWiresHasLED:
-		return c.handleB()
+		return c.handleB(bombState)
 	case complexWiresHasRed | complexWiresHasStar:
 		c.handleD()
 	case complexWiresHasBlue | complexWiresHasLED:
@@ -131,12 +128,12 @@ func (c *ComplexWiresModule) handleWire(val int) error {
 	case complexWiresHasBlue | complexWiresHasStar:
 		c.handleN()
 	case complexWiresHasLED | complexWiresHasStar:
-		return c.handleB()
+		return c.handleB(bombState)
 	// only one
 	case complexWiresHasRed:
-		return c.handleS()
+		return c.handleS(bombState)
 	case complexWiresHasBlue:
-		return c.handleS()
+		return c.handleS(bombState)
 	case complexWiresHasLED:
 		c.handleN()
 	case complexWiresHasStar:
@@ -156,22 +153,14 @@ func (c *ComplexWiresModule) handleN() {
 	communication.Tell("Draht NICHT durchtrennen!\nAlle exakt gleichen Drähte, egal wo, nicht mehr mitteilen.")
 }
 
-func (c *ComplexWiresModule) handleS() error {
-	var (
-		serial int
-		err    error
-	)
-	if c.serialCache != nil {
-		serial = *c.serialCache
-	} else {
-		serial, err = communication.AskInt("Letzte Ziffer der Seriennummer?")
-		if err != nil {
-			return err
-		}
-		c.serialCache = &serial
+func (c *ComplexWiresModule) handleS(bombState *state.BombState) error {
+	serial, err := bombState.Serial.GetLastDigit()
+	if err != nil {
+		return err
 	}
 
-	if serial%2 == 0 {
+	isSerialLastDigitEven := serial%2 == 0
+	if isSerialLastDigitEven {
 		c.handleD()
 		return nil
 	}
@@ -202,21 +191,13 @@ func (c *ComplexWiresModule) handleP() error {
 	return nil
 }
 
-func (c *ComplexWiresModule) handleB() error {
-	var (
-		hasMoreThanOneBattery bool
-		err                   error
-	)
-	if c.hasMoreThanOneBatteryCache != nil {
-		hasMoreThanOneBattery = *c.hasMoreThanOneBatteryCache
-	} else {
-		hasMoreThanOneBattery, err = communication.ConfirmNoDefault("Gibt es MEHR als eine Batterie?")
-		if err != nil {
-			return err
-		}
-		c.hasMoreThanOneBatteryCache = &hasMoreThanOneBattery
+func (c *ComplexWiresModule) handleB(bombState *state.BombState) error {
+	batterieCount, err := bombState.Batteries.GetCount()
+	if err != nil {
+		return err
 	}
 
+	hasMoreThanOneBattery := batterieCount > 1
 	if hasMoreThanOneBattery {
 		c.handleD()
 		return nil

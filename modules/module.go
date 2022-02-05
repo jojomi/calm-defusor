@@ -1,9 +1,13 @@
 package modules
 
+import (
+	"github.com/jojomi/calm-defusor/state"
+)
+
 type Module interface {
 	Name() string
-	Solve() error
-	Reset() error
+	Reset(bombState *state.BombState) error
+	Solve(bombState *state.BombState) error
 	String() string
 }
 

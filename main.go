@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/jojomi/calm-defusor/communication"
 	"github.com/jojomi/calm-defusor/modules"
+	"github.com/jojomi/calm-defusor/state"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"os"
-	"time"
 )
 
 func main() {
@@ -20,6 +22,7 @@ func main() {
 	log.Logger = log.With().Caller().Logger().Output(zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339})
 
 	mods := modules.NewModuleList().AddAllAvailable()
+	bombState := state.NewBombState()
 
 	isFirstModule := true
 	for {
@@ -39,8 +42,8 @@ func main() {
 		}
 
 		isFirstModule = false
-		mod.Reset()
-		err = mod.Solve()
+		mod.Reset(bombState)
+		err = mod.Solve(bombState)
 		if err != nil {
 			if err == terminal.InterruptErr {
 				log.Error().Err(err).Msgf(`Module "%s" aborted`, mod.Name())

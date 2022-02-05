@@ -2,8 +2,10 @@ package modules
 
 import (
 	"fmt"
+
 	"github.com/jojomi/calm-defusor/communication"
 	"github.com/jojomi/calm-defusor/ktane"
+	"github.com/jojomi/calm-defusor/state"
 )
 
 type SimpleWiresModule struct {
@@ -31,12 +33,12 @@ func NewSimpleWiresModule() *SimpleWiresModule {
 	}
 }
 
-func (s *SimpleWiresModule) Reset() error {
+func (s *SimpleWiresModule) Reset(_ *state.BombState) error {
 	s.colors = []ktane.Color{}
 	return nil
 }
 
-func (s *SimpleWiresModule) Solve() error {
+func (s *SimpleWiresModule) Solve(bombState *state.BombState) error {
 	// ask for colors
 	index := 0
 	for {
@@ -65,11 +67,11 @@ func (s *SimpleWiresModule) Solve() error {
 	case 3:
 		return s.handleThree()
 	case 4:
-		return s.handleFour()
+		return s.handleFour(bombState)
 	case 5:
-		return s.handleFive()
+		return s.handleFive(bombState)
 	case 6:
-		return s.handleSix()
+		return s.handleSix(bombState)
 	}
 	return nil
 }
@@ -90,9 +92,9 @@ func (s SimpleWiresModule) handleThree() error {
 	return nil
 }
 
-func (s SimpleWiresModule) handleFour() error {
+func (s SimpleWiresModule) handleFour(bombState *state.BombState) error {
 	if s.countColor(ktane.ColorRed) > 1 {
-		serial, err := communication.AskInt("Letzte Ziffer der Seriennummer?")
+		serial, err := bombState.Serial.GetLastDigit()
 		if err != nil {
 			return err
 		}
@@ -121,9 +123,9 @@ func (s SimpleWiresModule) handleFour() error {
 	return nil
 }
 
-func (s SimpleWiresModule) handleFive() error {
+func (s SimpleWiresModule) handleFive(bombState *state.BombState) error {
 	if s.colors[4].IsBlack() {
-		serial, err := communication.AskInt("Letzte Ziffer der Seriennummer?")
+		serial, err := bombState.Serial.GetLastDigit()
 		if err != nil {
 			return err
 		}
@@ -147,9 +149,9 @@ func (s SimpleWiresModule) handleFive() error {
 	return nil
 }
 
-func (s SimpleWiresModule) handleSix() error {
+func (s SimpleWiresModule) handleSix(bombState *state.BombState) error {
 	if s.countColor(ktane.ColorYellow) == 0 {
-		serial, err := communication.AskInt("Letzte Ziffer der Seriennummer?")
+		serial, err := bombState.Serial.GetLastDigit()
 		if err != nil {
 			return err
 		}

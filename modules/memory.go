@@ -2,7 +2,9 @@ package modules
 
 import (
 	"fmt"
+
 	"github.com/jojomi/calm-defusor/communication"
+	"github.com/jojomi/calm-defusor/state"
 )
 
 type MemoryStep struct {
@@ -30,13 +32,13 @@ func NewMemoryModule() *MemoryModule {
 	}
 }
 
-func (m *MemoryModule) Reset() error {
+func (m *MemoryModule) Reset(_ *state.BombState) error {
 	m.steps = []MemoryStep{}
 	m.tellOnly = false
 	return nil
 }
 
-func (m *MemoryModule) Solve() error {
+func (m *MemoryModule) Solve(_ *state.BombState) error {
 	rounds := 5
 
 	var (

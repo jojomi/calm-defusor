@@ -2,9 +2,11 @@ package modules
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/jojomi/calm-defusor/communication"
 	"github.com/jojomi/calm-defusor/ktane"
-	"strings"
+	"github.com/jojomi/calm-defusor/state"
 )
 
 type SimonSaysModule struct {
@@ -31,11 +33,11 @@ func NewSimonSaysModule() *SimonSaysModule {
 	}
 }
 
-func (s *SimonSaysModule) Reset() error {
+func (s *SimonSaysModule) Reset(_ *state.BombState) error {
 	return nil
 }
 
-func (s *SimonSaysModule) Solve() error {
+func (s *SimonSaysModule) Solve(bombState *state.BombState) error {
 	strikeCount, err := communication.ChooseOneWithMapper[int]("Bisherige Fehler (Strikes)?", []int{0, 1, 2}, func(t int) string {
 		if t == 0 {
 			return "Keine Fehler"
@@ -47,7 +49,7 @@ func (s *SimonSaysModule) Solve() error {
 		return err
 	}
 
-	hasVocal, err := communication.ConfirmNoDefault("Enthält die Seriennummer einen Vokal?")
+	hasVocal, err := bombState.Serial.HasVowel()
 	if err != nil {
 		return err
 	}

@@ -2,9 +2,11 @@ package modules
 
 import (
 	"fmt"
-	"github.com/jojomi/calm-defusor/communication"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/jojomi/calm-defusor/communication"
+	"github.com/jojomi/calm-defusor/state"
 )
 
 // How to improve?
@@ -83,12 +85,11 @@ func NewPasswordModule() *PasswordModule {
 		words:    words,
 		wordList: wordList,
 	}
-	module.Reset()
 
 	return module
 }
 
-func (p *PasswordModule) Reset() error {
+func (p *PasswordModule) Reset(_ *state.BombState) error {
 	length := len(p.words[0])
 	letters := make([]*LetterState, length)
 	for i := 0; i < length; i++ {
@@ -98,7 +99,9 @@ func (p *PasswordModule) Reset() error {
 	return nil
 }
 
-func (p *PasswordModule) Solve() error {
+func (p *PasswordModule) Solve(bombState *state.BombState) error {
+	p.Reset(bombState)
+
 	wordLength := p.getWordLength()
 	for letterIndex := 0; letterIndex < wordLength; letterIndex++ {
 		communication.AskPrintf("Lies nacheinander alle möglichen Buchstaben für die %d. Stelle vor!", letterIndex+1)

@@ -2,10 +2,12 @@ package modules
 
 import (
 	"fmt"
-	"github.com/jojomi/calm-defusor/communication"
-	"github.com/rs/zerolog/log"
 	"regexp"
 	"strings"
+
+	"github.com/jojomi/calm-defusor/communication"
+	"github.com/jojomi/calm-defusor/state"
+	"github.com/rs/zerolog/log"
 )
 
 type MorseModule struct {
@@ -23,11 +25,10 @@ func (x MorseModule) String() string {
 
 func NewMorseModule() *MorseModule {
 	mod := &MorseModule{}
-	mod.Reset()
 	return mod
 }
 
-func (x *MorseModule) Reset() error {
+func (x *MorseModule) Reset(_ *state.BombState) error {
 	x.morseLetters = []string{}
 
 	x.maxWordLength = maxMapper[string, int](x.getTexts(), func(in string) int {
@@ -37,7 +38,9 @@ func (x *MorseModule) Reset() error {
 	return nil
 }
 
-func (x *MorseModule) Solve() error {
+func (x *MorseModule) Solve(bombState *state.BombState) error {
+	x.Reset(bombState)
+
 	fmt.Println("Buchstaben mit l (lang) und k (kurz) eingeben.")
 	fmt.Println()
 	communication.Tell("Lies Buchstaben einzeln vor, die große Pause zum Wortanfang ist egal.")

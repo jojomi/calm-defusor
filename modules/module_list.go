@@ -13,6 +13,7 @@ func (m ModuleList) All() []Module {
 }
 
 func (m *ModuleList) AddAllAvailable() *ModuleList {
+	m.AddModule(NewBombStateModule())
 	m.AddModule(NewSimpleWiresModule())
 	m.AddModule(NewBigButtonModule())
 	m.AddModule(NewSymbolsModule())

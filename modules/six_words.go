@@ -2,8 +2,10 @@ package modules
 
 import (
 	"fmt"
+
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/jojomi/calm-defusor/communication"
+	"github.com/jojomi/calm-defusor/state"
 	"github.com/rs/zerolog/log"
 )
 
@@ -113,11 +115,11 @@ func NewSixWordsModule() *SixWordsModule {
 	}
 }
 
-func (x *SixWordsModule) Reset() error {
+func (x *SixWordsModule) Reset(_ *state.BombState) error {
 	return nil
 }
 
-func (x *SixWordsModule) Solve() error {
+func (x *SixWordsModule) Solve(_ *state.BombState) error {
 	rounds := 5
 	for i := 1; i <= rounds; i++ {
 		fmt.Println("Runde", i)
