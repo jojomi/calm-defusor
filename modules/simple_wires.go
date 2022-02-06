@@ -177,7 +177,7 @@ func (s SimpleWiresModule) handleSix(bombState *state.BombState) error {
 
 // one-based!
 func (s SimpleWiresModule) cut(index int) {
-	communication.Tellf("%d. Draht trennen (dieser hat die Farbe %s", index, s.colors[index-1].BySysLocaleForTerminal())
+	communication.Tellf("%d. Draht trennen (der ist %s", index, s.colors[index-1].BySysLocaleForTerminal())
 	communication.Tellf(")")
 }
 
