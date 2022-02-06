@@ -44,28 +44,32 @@ func (x *SymbolsModule) Reset(_ *state.BombState) error {
 func (x *SymbolsModule) Solve(_ *state.BombState) error {
 	numSymbols := 4
 
-	allSymbols := x.allSymbols()
-	symbols := make([]SymbolsSymbol, 0, numSymbols)
-	for i := 1; i <= numSymbols; i++ {
-		sym, err := communication.ChooseOneWithMapper[SymbolsSymbol](fmt.Sprintf("Symbol %d?", i), allSymbols, func(symbol SymbolsSymbol) string {
-			return symbol.Name()
-		})
-		if err != nil {
-			if err == terminal.InterruptErr {
-				return nil
+	for {
+		allSymbols := x.allSymbols()
+		symbols := make([]SymbolsSymbol, 0, numSymbols)
+		for i := 1; i <= numSymbols; i++ {
+			sym, err := communication.ChooseOneWithMapper[SymbolsSymbol](fmt.Sprintf("Symbol %d?", i), allSymbols, func(symbol SymbolsSymbol) string {
+				return symbol.Name()
+			})
+			if err != nil {
+				if err == terminal.InterruptErr {
+					return nil
+				}
+				log.Error().Err(err).Msg("could not get symbol")
+				i--
+				continue
 			}
-			log.Error().Err(err).Msg("could not get symbol")
-			i--
+			symbols = append(symbols, sym)
+		}
+
+		row, err := x.findRow(symbols)
+		if err != nil {
+			communication.Tell("Ungültige Symbolkombination. Von vorne!\n")
 			continue
 		}
-		symbols = append(symbols, sym)
+		x.printOrdered(symbols, row)
+		break
 	}
-
-	row, err := x.findRow(symbols)
-	if err != nil {
-		panic(err)
-	}
-	x.printOrdered(symbols, row)
 	return nil
 }
 
